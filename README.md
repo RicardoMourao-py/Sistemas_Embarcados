@@ -65,3 +65,6 @@ Feedbacks:
   
 ### Design (2 pts)
 
+Sujeito a alteração.
+
+<img src="doc/design.png" alt="design do controle" width="1000"/>
