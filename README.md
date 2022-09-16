@@ -27,8 +27,8 @@ Este sistema embarcado consiste em ajudar usuários sem internet ou entediados. 
 O controle servirá para guiar o dinossauro.
 
 ### Jornada do usuários (3 pts)
-
-<!-- Descreva ao menos duas jornadas de usuários distintos, é para caprichar! -->
+#### Jornada 1
+![Logo do Markdown](doc/p1_a.png)
 
 ### Comandos/ Feedbacks (2 pts)
 
