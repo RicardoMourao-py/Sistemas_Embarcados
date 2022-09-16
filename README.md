@@ -6,24 +6,25 @@ Desenvolvendo um controle remoto.
 
 ### Integrantes
 
-- Nome1
-- Nome2
+- Adney Costa Moura
+- Ricardo Mourão Rodrigues Filho
 
 ### Ideia
 
-<!--  Descreva aqui em poucas palavras qual a ideia do seu controle. Se ele vai ser de jogo ou de aplicação -->
+Criar o controle para controlar o dinossauro do chrome. <br>
+Link da aplicação: https://chromedino.com/ ou chrome://dino/
 
 ### Nome
 
-<!-- De um nome ao seu controle! -->
+DinoJump
 
 ### Usuários 
 
-<!-- Descreva aqui quem seriam os possíveis usuários deste controle. -->
+Este sistema embarcado consiste em ajudar usuários sem internet ou entediados. Foi escolhido o jogo do dino ("famoso jogo dos sem wifi"). Sendo assim, o usuário pode se debruçar na aplicação, consequentemente, trazendo o seu dia menos CHATO!  
 
 ### Software/Jogo 
 
-<!-- Qual software que seu controle vai controlar? -->
+O controle servirá para guiar o dinossauro.
 
 ### Jornada do usuários (3 pts)
 
