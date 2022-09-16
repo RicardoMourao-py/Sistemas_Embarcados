@@ -11,6 +11,8 @@ Desenvolvendo um controle remoto.
 
 ### Ideia
 
+<img src="doc/gif.gif" alt="jornada do usuario 1" width="1000"/>
+
 Criar o controle para controlar o dinossauro do chrome. <br>
 Link da aplicação: https://chromedino.com/ ou chrome://dino/
 
