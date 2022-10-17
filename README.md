@@ -52,6 +52,15 @@ Feedbacks:
 
 ## In/OUT (3 pts)
 
+
+|    Botão      |      Pino     |
+| ------------- | ------------- |
+| Verde  | PA6  |
+| Azul  | PC19  |
+| Vermelho  | PA2  |
+| Liga/Desliga  | PA3  |
+
+
 - Botão para pular (Digital) - verde:
   - Usuário clica e o dino pula, acendendo o led para identificação.
 - Botão para abaixar (Digital) - vermelho:
