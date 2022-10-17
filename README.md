@@ -53,12 +53,12 @@ Feedbacks:
 ## In/OUT (3 pts)
 
 
-|    Botão      |      Pino     |
-| ------------- | ------------- |
-| Verde  | PA6  |
-| Azul  | PC19  |
-| Vermelho  | PA2  |
-| Liga/Desliga  | PA3  |
+|    Botão      |      Pino     |      Função   |
+| ------------- | ------------- | ------------- |
+| Verde  | PA6  | Pular |
+| Azul  | PC19  | Iniciar/Reiniciar jogo |
+| Vermelho  | PA2  | Abaixar |
+| Liga/Desliga  | PA3  | Ligar/Desligar controle |
 
 
 - Botão para pular (Digital) - verde:
