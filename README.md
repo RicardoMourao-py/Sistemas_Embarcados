@@ -55,8 +55,8 @@ Feedbacks:
 
 |    Botão      |      Pino     |      Função   |
 | ------------- | ------------- | ------------- |
-| Verde  | PA6  | Pular |
-| Azul  | PC19  | Iniciar/Reiniciar jogo |
+| Azul  | PA6  | Pular |
+| Verde  | PC19  | Iniciar/Reiniciar jogo |
 | Vermelho  | PA2  | Abaixar |
 | Liga/Desliga  | PA3  | Ligar/Desligar controle |
 
