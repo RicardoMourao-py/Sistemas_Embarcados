@@ -6,7 +6,7 @@ import logging
 
 class MyControllerMap:
     def __init__(self):
-        self.button = {'AZUL': 'space',
+        self.button = {'AZUL': 'up',
                        'VERMELHO': 'down'} 
 
 class SerialControllerInterface:
@@ -18,8 +18,22 @@ class SerialControllerInterface:
         self.ser = serial.Serial(port, baudrate=baudrate)
         self.mapping = MyControllerMap()
         self.incoming = '0'
+        self.handshake = False
         pyautogui.PAUSE = 0  ## remove delay
     
+    def handshake_protocol(self):
+        while True:
+            self.ser.write(b'1')
+
+            data = self.ser.read()
+            logging.debug("Received DATA: {}".format(data))
+            if data == b'1':
+                logging.info("HANDSHAKE")
+                self.incoming = self.ser.read()
+                break
+            
+        self.handshake = True
+
     def update(self):
         ## Sync protocol
         while self.incoming != b'X':
@@ -33,16 +47,20 @@ class SerialControllerInterface:
         if data == b'1':
             logging.info("BOTÃO AZUL APERTADO")
             pyautogui.keyDown(self.mapping.button['AZUL'])
-            pyautogui.keyUp(self.mapping.button['AZUL'])
+            
         elif data == b'2':
-            logging.info("BOTÃO VERMELHO APERTADO")
-            pyautogui.keyDown(self.mapping.button['VERMELHO'])
-            # pyautogui.keyUp(self.mapping.button['VERMELHO'])
+            logging.info("BOTÃO AZUL SOLTO")
+            pyautogui.keyUp(self.mapping.button['AZUL'])
+
         elif data == b'3':
             logging.info("BOTÃO VERMELHO APERTADO")
-            pyautogui.keyUp(self.mapping.button['VERMELHO'])
+            pyautogui.keyDown(self.mapping.button['VERMELHO'])
 
         elif data == b'4':
+            logging.info("BOTÃO VERMELHO SOLTO")
+            pyautogui.keyUp(self.mapping.button['VERMELHO'])
+
+        elif data == b'5':
             logging.info("BOTÃO VERDE APERTADO")
             # logging.info("KEYUP A")
             # pyautogui.keyUp(self.mapping.button['A'])
@@ -79,5 +97,6 @@ if __name__ == '__main__':
     else:
         controller = SerialControllerInterface(port=args.serial_port, baudrate=args.baudrate)
 
-    while True:
+    controller.handshake_protocol()
+    while True and controller.handshake:
         controller.update()
