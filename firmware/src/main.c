@@ -23,6 +23,12 @@ typedef struct {
 	uint value;
 } adcData;
 
+typedef struct {
+	int len_data;
+	uint data_vol;
+	char data_button;	
+} data_struct;
+
 // LEDs
 #define LED_PIO      PIOC
 #define LED_PIO_ID   ID_PIOC
@@ -49,6 +55,11 @@ typedef struct {
 #define BUT_VERDE_PIO_ID      ID_PIOA
 #define BUT_VERDE_IDX         6
 #define BUT_VERDE_IDX_MASK    (1 << BUT_VERDE_IDX)
+
+#define BUT_PRETO             PIOA
+#define BUT_PRETO_PIO_ID      ID_PIOA
+#define BUT_PRETO_IDX         3
+#define BUT_PRETO_IDX_MASK    (1 << BUT_PRETO_IDX)
 
 // usart (bluetooth ou serial)
 // Descomente para enviar dados
@@ -133,41 +144,57 @@ extern void vApplicationMallocFailedHook(void) {
 /************************************************************************/
 void butAzul_callback(void) {
 // 	printf("botão azul\n");
-// 	char x = '1';
-// 	BaseType_t xHigherPriorityTaskWoken = pdTRUE;
-// 	xQueueSendFromISR(xQueueButton, &x, &xHigherPriorityTaskWoken);
+	char x = '1';
+	char len_data = '1';
+	BaseType_t xHigherPriorityTaskWoken = pdTRUE;
 	
-	if (!pio_get(BUT_AZUL, PIO_INPUT, BUT_AZUL_IDX_MASK)) {
-		printf("botão azul descida\n");
-		char x = '1';
-		BaseType_t xHigherPriorityTaskWoken = pdTRUE;
-		xQueueSendFromISR(xQueueButton, &x, &xHigherPriorityTaskWoken);
-		} else {
-		printf("botão azul subida\n");
-		char x = '2';
-		BaseType_t xHigherPriorityTaskWoken = pdTRUE;
-		xQueueSendFromISR(xQueueButton, &x, &xHigherPriorityTaskWoken);
-	}
+	// ----------   ENVIANDO TAMANHO DO PACOTE   ----------
+	xQueueSendFromISR(xQueueButton, &len_data, &xHigherPriorityTaskWoken);
+	// ----------   ENVIANDO PACOTE   ----------
+	xQueueSendFromISR(xQueueButton, &x, &xHigherPriorityTaskWoken);
 }
 
 void butVermelho_callback(void) {
+	char len_data = '1';
+	BaseType_t xHigherPriorityTaskWoken = pdTRUE;
 	if (!pio_get(BUT_VERMELHO, PIO_INPUT, BUT_VERMELHO_IDX_MASK)) {
-		printf("botão vermelho descida\n");
-		char x = '3';
-		BaseType_t xHigherPriorityTaskWoken = pdTRUE;
-		xQueueSendFromISR(xQueueButton, &x, &xHigherPriorityTaskWoken); 
+// 		printf("botão vermelho descida\n");
+		char x = '2';
+		// ----------   ENVIANDO TAMANHO DO PACOTE   ----------
+		xQueueSendFromISR(xQueueButton, &len_data, &xHigherPriorityTaskWoken);
+		// ----------   ENVIANDO PACOTE   ----------
+		xQueueSendFromISR(xQueueButton, &x, &xHigherPriorityTaskWoken);
 		} else {
-		printf("botão vermelho subida\n");
-		char x = '4';
-		BaseType_t xHigherPriorityTaskWoken = pdTRUE;
+// 		printf("botão vermelho subida\n");
+		char x = '3';
+		// ----------   ENVIANDO TAMANHO DO PACOTE   ----------
+		xQueueSendFromISR(xQueueButton, &len_data, &xHigherPriorityTaskWoken);
+		// ----------   ENVIANDO PACOTE   ----------
 		xQueueSendFromISR(xQueueButton, &x, &xHigherPriorityTaskWoken);
 	}
 }
 
 void butVerde_callback(void) {
-	printf("botão verde\n");
-	char x = '5';
+// 	printf("botão verde\n");
+	char x = '4';
+	char len_data = '1';
 	BaseType_t xHigherPriorityTaskWoken = pdTRUE;
+	
+	// ----------   ENVIANDO TAMANHO DO PACOTE   ----------
+	xQueueSendFromISR(xQueueButton, &len_data, &xHigherPriorityTaskWoken);
+	// ----------   ENVIANDO PACOTE   ----------
+	xQueueSendFromISR(xQueueButton, &x, &xHigherPriorityTaskWoken);
+}
+
+void butPreto_callback(void) {
+// 	printf("botão preto\n");
+	char x = '5';
+	char len_data = '1';
+	BaseType_t xHigherPriorityTaskWoken = pdTRUE;
+	
+	// ----------   ENVIANDO TAMANHO DO PACOTE   ----------
+	xQueueSendFromISR(xQueueButton, &len_data, &xHigherPriorityTaskWoken);
+	// ----------   ENVIANDO PACOTE   ----------
 	xQueueSendFromISR(xQueueButton, &x, &xHigherPriorityTaskWoken);
 }
 
@@ -190,7 +217,7 @@ static void AFEC_pot_callback(void) {
 	adcData adc;
 	adc.value = afec_channel_get_value(AFEC_POT, AFEC_POT_CHANNEL);
 	BaseType_t xHigherPriorityTaskWoken = pdTRUE;
-	xQueueSendFromISR(xQueueADC, &adc, &xHigherPriorityTaskWoken);
+	xQueueSendFromISR(xQueueADC, &(adc), &xHigherPriorityTaskWoken);
 }
 
 void vTimerCallback(TimerHandle_t xTimer) {
@@ -207,29 +234,36 @@ void io_init(void) {
 	pmc_enable_periph_clk(BUT_AZUL);
 	pmc_enable_periph_clk(BUT_VERMELHO);
 	pmc_enable_periph_clk(BUT_VERDE);
+	pmc_enable_periph_clk(BUT_PRETO);
 
 	pio_configure(BUT_AZUL, PIO_INPUT, BUT_AZUL_IDX_MASK, PIO_PULLUP| PIO_DEBOUNCE);
 	pio_configure(BUT_VERMELHO, PIO_INPUT, BUT_VERMELHO_IDX_MASK, PIO_PULLUP| PIO_DEBOUNCE);
 	pio_configure(BUT_VERDE, PIO_INPUT, BUT_VERDE_IDX_MASK, PIO_PULLUP| PIO_DEBOUNCE);
+	pio_configure(BUT_PRETO, PIO_INPUT, BUT_PRETO_IDX_MASK, PIO_PULLUP| PIO_DEBOUNCE);
 	
 	pio_set_debounce_filter(BUT_AZUL, BUT_AZUL_IDX_MASK, 60);
 	pio_set_debounce_filter(BUT_VERMELHO, BUT_VERMELHO_IDX_MASK, 60);
 	pio_set_debounce_filter(BUT_VERDE, BUT_VERDE_IDX_MASK, 60);
+	pio_set_debounce_filter(BUT_PRETO, BUT_PRETO_IDX_MASK, 60);
 	
-	pio_handler_set(BUT_AZUL, BUT_AZUL_PIO_ID, BUT_AZUL_IDX_MASK, PIO_IT_EDGE,
+	pio_handler_set(BUT_AZUL, BUT_AZUL_PIO_ID, BUT_AZUL_IDX_MASK, PIO_IT_FALL_EDGE,
 	butAzul_callback);
 	pio_handler_set(BUT_VERMELHO, BUT_VERMELHO_PIO_ID, BUT_VERMELHO_IDX_MASK, PIO_IT_EDGE,
 	butVermelho_callback);
 	pio_handler_set(BUT_VERDE, BUT_VERDE_PIO_ID, BUT_VERDE_IDX_MASK, PIO_IT_FALL_EDGE,
 	butVerde_callback);
+	pio_handler_set(BUT_PRETO, BUT_PRETO_PIO_ID, BUT_PRETO_IDX_MASK, PIO_IT_FALL_EDGE,
+	butPreto_callback);
 
 	pio_enable_interrupt(BUT_AZUL, BUT_AZUL_IDX_MASK);
 	pio_enable_interrupt(BUT_VERMELHO, BUT_VERMELHO_IDX_MASK);
 	pio_enable_interrupt(BUT_VERDE, BUT_VERDE_IDX_MASK);
+	pio_enable_interrupt(BUT_PRETO, BUT_PRETO_IDX_MASK);
 
 	pio_get_interrupt_status(BUT_AZUL);
 	pio_get_interrupt_status(BUT_VERMELHO);
 	pio_get_interrupt_status(BUT_VERDE);
+	pio_get_interrupt_status(BUT_PRETO);
 
 	NVIC_EnableIRQ(BUT_AZUL_PIO_ID);
 	NVIC_SetPriority(BUT_AZUL_PIO_ID, 4);
@@ -239,6 +273,9 @@ void io_init(void) {
 
 	NVIC_EnableIRQ(BUT_VERMELHO_PIO_ID);
 	NVIC_SetPriority(BUT_VERMELHO_PIO_ID, 4);
+	
+	NVIC_EnableIRQ(BUT_PRETO_PIO_ID);
+	NVIC_SetPriority(BUT_PRETO_PIO_ID, 4);
 }
 
 
@@ -393,6 +430,58 @@ void TC_init(Tc *TC, int ID_TC, int TC_CHANNEL, int freq) {
 	tc_enable_interrupt(TC, TC_CHANNEL, TC_IER_CPCS);
 }
 
+void send_button(char len_data, char button) {
+	char eof = 'X';
+	
+	// ----------   ENVIANDO TAMANHO DO PACOTE   ----------
+	while(!usart_is_tx_ready(USART_COM)) {
+		vTaskDelay(10 / portTICK_PERIOD_MS);
+	}
+	usart_write(USART_COM, len_data);
+	
+	// ----------   ENVIANDO PACOTE   ----------
+	while(!usart_is_tx_ready(USART_COM)) {
+		vTaskDelay(10 / portTICK_PERIOD_MS);
+	}
+	usart_write(USART_COM, button);
+	
+	// ----------   ENVIANDO EOF   ----------
+// 	while(!usart_is_tx_ready(USART_COM)) {
+// 		vTaskDelay(10 / portTICK_PERIOD_MS);
+// 	}
+// 	usart_write(USART_COM, eof);
+	
+	vTaskDelay(50 / portTICK_PERIOD_MS);
+}
+
+void send_afec(char len_data, int afec) {
+	char eof = 'X';
+		
+	// ----------   ENVIANDO TAMANHO DO PACOTE   ----------
+	while(!usart_is_tx_ready(USART_COM)) {
+		vTaskDelay(10 / portTICK_PERIOD_MS);
+	}
+	usart_write(USART_COM, len_data);
+		
+	// ----------   ENVIANDO PACOTE   ----------
+	while(!usart_is_tx_ready(USART_COM)) {
+		vTaskDelay(10 / portTICK_PERIOD_MS);
+	}
+	usart_write(USART_COM, afec);
+	
+	while(!usart_is_tx_ready(USART_COM)) {
+		vTaskDelay(10 / portTICK_PERIOD_MS);
+	}
+	usart_write(USART_COM, afec >> 8);
+		
+	// ----------   ENVIANDO EOF   ----------
+// 	while(!usart_is_tx_ready(USART_COM)) {
+// 		vTaskDelay(10 / portTICK_PERIOD_MS);
+// 	}
+// 	usart_write(USART_COM, eof);
+		
+	vTaskDelay(50 / portTICK_PERIOD_MS);
+}
 /************************************************************************/
 /* TASKS                                                                */
 /************************************************************************/
@@ -403,51 +492,25 @@ static void task_proc(void *pvParameters) {
 	tc_start(TC0, 1);
 	
 	adcData adc;
-
+	char len_data = '2';
+	uint previous_afec = 0;
+	
 	while (1) {
 		if (xQueueReceive(xQueueADC, &(adc), 1000)) {
-			printf("chegou afec\n");
-			printf("%d\n", adc.value);
-// 			xQueueSend(xQueueADC, (void *)&adc, 10);
+			if (abs(previous_afec - adc.value) < 100) {
+				;
+			} else {
+				previous_afec = adc.value;
+				BaseType_t xHigherPriorityTaskWoken = pdTRUE;
+			
+				// ----------   ENVIANDO TAMANHO DO PACOTE   ----------
+				xQueueSendFromISR(xQueueButton, &len_data, &xHigherPriorityTaskWoken);
+			
+				// ----------   ENVIANDO PACOTE   ----------
+				xQueueSendFromISR(xQueueButton, (void *)&adc, &xHigherPriorityTaskWoken);
+			}
 		}
 		
-	}
-}
-
-
-void task_handshake(void) {
-	printf("Task Handshake started \n");
-	
-	config_usart0();
-	hc05_init();
-	
-	io_init();
-	char readChar;
-	char eof = 'X';
-	int handshake = 1;
-	while (1) {
-		
-// 		if (handshake) {
-// 			char status = usart_read(USART_COM, &readChar);
-// 			if (readChar == '1') {
-// 				
-// 				while(!usart_is_tx_ready(USART_COM)) {
-// 					vTaskDelay(10 / portTICK_PERIOD_MS);
-// 				}
-// 				usart_write(USART_COM, '1');
-// 			
-// 				while(!usart_is_tx_ready(USART_COM)) {
-// 					vTaskDelay(10 / portTICK_PERIOD_MS);
-// 				}
-// 				usart_write(USART_COM, eof);
-// 			
-// // 				handshake = 0;
-// 				status = '0';
-// 				readChar = '0';
-// 			}
-// 			//dorme por 500 ms
-// 			vTaskDelay(50 / portTICK_PERIOD_MS);
-// 		}
 	}
 }
 
@@ -463,13 +526,16 @@ void task_bluetooth(void) {
 	io_init();
 	
 	char button;
-	char eof = 'X';
 	int handshake = 0;
 	char readChar;
-
+	char len_data;
+	char eof = 'X';
+	adcData adc;
+	int ligado = 1;
+	
 	// Task não deve retornar.
 	while(1) {
-		
+			
 		// ----------   HANDSHAKE   ----------
 		char status = usart_read(USART_COM, &readChar);
 		if (readChar == '1') {
@@ -490,25 +556,29 @@ void task_bluetooth(void) {
 		
 		// ----------   COMMUNICATION   ----------
 		if (handshake) {
-			if (xQueueReceive(xQueueButton, &button, 0)) {
-				printf("botão apertado e enviado na task\n");
-				printf("afec = %d\n", button);
-						//envia status botão
-				while(!usart_is_tx_ready(USART_COM)) {
-					vTaskDelay(10 / portTICK_PERIOD_MS);
+			if (xQueueReceive(xQueueButton, &len_data, 0)) {
+				if (len_data == '1') {
+					xQueueReceive(xQueueButton, &button, 0);
+					if (button == '5') {
+						printf("%d\n", ligado);
+						ligado = !ligado;
+						printf("%d\n", ligado);
+						
+					}
+					if (ligado) {
+						printf("enviado\n");
+						send_button(len_data, button);
+					}
 				}
-				usart_write(USART_COM, button);
-			
-				// envia fim de pacote
-				while(!usart_is_tx_ready(USART_COM)) {
-					vTaskDelay(10 / portTICK_PERIOD_MS);
+				
+				else if (len_data == '2') {
+					xQueueReceive(xQueueButton, &adc, 0);
+					if (ligado) {
+						send_button(len_data, adc.value);
+					}
 				}
-				usart_write(USART_COM, eof);
-			//dorme por 500 ms
-			vTaskDelay(50 / portTICK_PERIOD_MS);
 			}
 		}
-		
 	}
 }
 /************************************************************************/
@@ -532,9 +602,7 @@ int main(void) {
 
 	/* Create task to make led blink */
 	xTaskCreate(task_bluetooth, "BLT", TASK_BLUETOOTH_STACK_SIZE, NULL,	TASK_BLUETOOTH_STACK_PRIORITY, NULL);
-	
-	xTaskCreate(task_handshake, "HDS", TASK_BLUETOOTH_STACK_SIZE, NULL,	TASK_BLUETOOTH_STACK_PRIORITY, NULL);
-	
+		
 	xTaskCreate(task_proc, "PROC", TASK_BLUETOOTH_STACK_SIZE, NULL,	TASK_BLUETOOTH_STACK_PRIORITY, NULL);
 
 	/* Start the scheduler. */
