@@ -2,12 +2,27 @@
 
 Desenvolvendo um controle remoto.
 
+<div align="center" style="max-width:68rem;">
+
+![C](https://img.shields.io/badge/c-%2300599C.svg?style=for-the-badge&logo=c&logoColor=white)
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+
+</div>
+
 ## Entrega 1
 
 ### Integrantes
 
-- Adney Costa Moura
-- Ricardo Mourão Rodrigues Filho
+
+<div align="center" style="max-width:68rem;">
+<table>
+  <tr>
+    <td align="center"><a href="https://github.com/Adneycm"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/Adneycm" width="100px;" alt=""/><br /><sub><b>Adney Costa</b></sub></a><br /><a href="https://github.com/Adneycm" title="Adney Costa"></a> Developer</td>
+   <td align="center"><a href="https://github.com/RicardoMourao-py"><img style="border-radius: 50%;" src="https://avatars.githubusercontent.com/RicardoMourao-py" width="100px;" alt=""/><br /><sub><b>Ricardo Mourão</b></sub></a><br /><a href="https://github.com/RicardoMourao-py" title="Ricardo Mourão"></a>Developer</td>
+
+  </tr>
+</table>
+</div>
 
 ### Ideia
 
