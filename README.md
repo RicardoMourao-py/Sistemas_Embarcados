@@ -43,14 +43,14 @@ Este sistema embarcado consiste em ajudar usuários sem internet ou entediados. 
 
 O controle servirá para guiar o dinossauro.
 
-### Jornada do usuários (3 pts)
+### Jornada do usuários 
 #### Jornada 1
 <img src="doc/p1_a.png" alt="jornada do usuario 1" width="1000"/>
 
 #### Jornada 2
 <img src="doc/p1_b.png" alt="jornada do usuario 1" width="1000"/>
 
-### Comandos/ Feedbacks (2 pts)
+### Comandos/ Feedbacks
 
 Comandos:
 
@@ -62,10 +62,9 @@ Comandos:
 
 Feedbacks:
 
-- Tela para mostrar pontuação do jogador e volume.
 - Led de ON / OFF
 
-## In/OUT (3 pts)
+## In/OUT
 
 
 |    Botão      |      Pino     |      Função   |
@@ -76,11 +75,11 @@ Feedbacks:
 | Liga/Desliga  | PA3  | Ligar/Desligar controle |
 
 
-- Botão para pular (Digital) - verde:
+- Botão para pular (Digital) - Azul:
   - Usuário clica e o dino pula, acendendo o led para identificação.
 - Botão para abaixar (Digital) - vermelho:
   - Usuário clica e o dino abaixa, acendendo o led(cor diferente) para identificação
-- Botão para iniciar/reiniciar a aplicação (Digital)  - azul
+- Botão para iniciar/reiniciar a aplicação (Digital)  - Verde
   - Usuário clica e volta a jogar o DinoJump.
 - Botão para ligar/desligar o controle embarcado (Digital) - preto
   - Quando energizado procura por um aparelho para se conectar
@@ -89,8 +88,10 @@ Feedbacks:
 - Controle de som do computador (Analógico)
   - Usuário resolve aumentar ou diminuir o volume da aplicação, aparecendo o vlume no output.
   
-### Design (2 pts)
+### Design
 
-Sujeito a alteração.
+<img src="doc/controle.jpg" alt="design do controle" width="500"/>
 
-<img src="doc/design.png" alt="design do controle" width="1000"/>
+### Rodando a Aplicação
+
+Link: https://youtu.be/C_ZQ3qkdAFU
